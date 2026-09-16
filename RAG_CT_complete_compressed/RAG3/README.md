@@ -372,7 +372,7 @@ The second iteration therefore targeted:
 | Epochs | 1 | **2** |
 | Per-device batch | 2 | **4** |
 | Gradient accumulation | 8 | 4 |
-| Effective batch | 16 | **32** |
+| Effective batch | 16 | 16 |
 | Reference cleaning | Initial | **Improved** |
 | Eligibility prompt | Initial | **Strengthened** |
 

@@ -353,7 +353,7 @@ Iteration 1 revealed weaknesses in:
 | Epochs                       |       1 |            **2** |
 | Per-device batch             |       2 |            **4** |
 | Gradient accumulation        |       8 |                4 |
-| Effective batch              |      16 |           **32** |
+| Effective batch              |      16 |                  16 |
 | Reference cleaning           | Initial |     **Improved** |
 | Candidate eligibility prompt | Initial | **Strengthened** |
 
