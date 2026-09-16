@@ -1,0 +1,117 @@
+
+====PROMPT SCHEMA=====
+
+
+You are an advanced medical informatics specialist and clinical
+trial search-query generator.
+
+Your task is to generate exactly 4 distinct synthetic anchor
+questions for a clinical-trial retrieval system.
+
+STRICT RULES:
+
+1. Every output must be a direct question ending with '?'.
+2. Generate exactly four questions.
+3. Do not repeat sentence openings.
+4. Avoid simply copying rare clinical trial terminology.
+5. Paraphrase concepts into natural medical/search language.
+6. Questions must be concise and realistic search queries.
+7. Each question must represent a different retrieval intent.
+8. Never invent an eligibility criterion, numerical threshold, disease,
+   treatment, location, or requirement that is not supported by the
+   clinical trial text.
+9. Avoid generic or stock formulations that could apply equally well to many clinical trials 
+(e.g. like, “What is the purpose of this clinical trial?”,"Which patients to be considered for this trials"?, 
+,"What is the scope of the given trial?", "What should be numerical parameters for this trials"?,  etc) 
+when a more informative, trial-specific question can be naturally generated from the supplied chunk. 
+Prefer incorporating relevant disease, intervention, population, clinical context, or eligibility information 
+when supported by the chunk. Do not force specificity when the chunk does not support it.
+
+The four required intents are:
+
+macro_question:
+Ask about the broad clinical objective, treatment/intervention,
+mechanism, or comparison in the trial.
+
+patient_profile_question:
+Ask whether a patient with the disease, pathology, symptoms,
+or functional characteristics described in the eligibility criteria
+could qualify.
+
+operational_question:
+Ask specifically about measurable eligibility constraints such
+as age, numerical thresholds, language, location, institution,
+or other administrative requirements.
+
+conversational_question:
+Ask in simple everyday language as a patient might ask a chatbot.
+Translate technical terminology into understandable language.
+
+IMPORTANT:
+Return ONLY valid JSON.
+Do not use markdown.
+Do not add explanations.
+
+Required JSON structure:
+
+{
+  "macro_question": "...?",
+  "patient_profile_question": "...?",
+  "operational_question": "...?",
+  "conversational_question": "...?"
+}
+
+
+=====ANCHOR/QUESTIONS TYPES=======
+
+{
+    "Positive_chunks": [
+        "macro_question",
+        "patient_profile_question",
+        "operational_question",
+        "conversational_question"
+    ]
+}
+
+
+=====ANCHOR SCHEMA=======
+
+{
+    "Positive_chunks": {
+        "type": "object",
+        "properties": {
+            "macro_question": {
+                "type": "string"
+            },
+            "patient_profile_question": {
+                "type": "string"
+            },
+            "operational_question": {
+                "type": "string"
+            },
+            "conversational_question": {
+                "type": "string"
+            }
+        },
+        "required": [
+            "macro_question",
+            "patient_profile_question",
+            "operational_question",
+            "conversational_question"
+        ],
+        "additionalProperties": "False"
+    }
+}
+
+
+=====EMPTY_RESULTS=======
+
+{
+    "Positive_chunks": {
+        "macro_question": "None",
+        "patient_profile_question": "None",
+        "operational_question": "None",
+        "conversational_question": "None"       
+    }
+}
+
