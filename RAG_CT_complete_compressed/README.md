@@ -353,7 +353,7 @@ Iteration 1 revealed weaknesses in:
 | Epochs                       |       1 |            **2** |
 | Per-device batch             |       2 |            **4** |
 | Gradient accumulation        |       8 |                4 |
-| Effective batch              |      16 |                  16 |
+| Effective batch              |      16 |           **16** |
 | Reference cleaning           | Initial |     **Improved** |
 | Candidate eligibility prompt | Initial | **Strengthened** |
 
@@ -440,48 +440,49 @@ The controlled comparison isolates the effect of the specialized retrieval + gen
 
 ---
 
-# 9. Earlier End-to-End CT-Pipeline Results
+# 9. End-to-End CT-Pipeline Results
 
-These are the **current documented end-to-end results**.
+The complete CT-RAG pipeline was evaluated with both the earlier RAG3 Iteration-1 model and the updated RAG3 Iteration-2 model.
 
-The pipeline was run using the earlier RAG3 generation model, **before the updated RAG3 Iteration-2 model was integrated**.
+| RAG3 Generation | Model | ROUGE-L | BERTScore |
+| ---------------- | ----- | -------: | ---------: |
+| Iteration 1 | Base | 0.483989 | 0.906158 |
+| Iteration 1 | FT | **0.502342** | **0.910006** |
+| Iteration 2 | Base | 0.479794 | 0.906269 |
+| Iteration 2 | FT | **0.512608** | **0.911030** |
 
-| Metric    |     Base |           FT |
-| --------- | -------: | -----------: |
-| ROUGE-L   | 0.483989 | **0.502342** |
-| BERTScore | 0.906158 | **0.910006** |
+### Iteration-2 End-to-End Improvement
 
-### Current interpretation
-
-The complete fine-tuned pipeline showed higher:
+For the complete pipeline:
 
 ```text
 ROUGE-L
-0.483989 → 0.502342
-
-BERTScore
-0.906158 → 0.910006
+Base: 0.479794
+FT:   0.512608
+FT − Base: +0.032814 (~6.84%)
 ```
 
-These are the results currently used for the end-to-end CT-pipeline comparison.
-
-### Important status
-
-The updated RAG3 Iteration-2 model has **not yet been substituted into this pipeline and rerun**.
-
-Therefore:
+Compared with Iteration 1:
 
 ```text
-RAG3 Iteration-2
-        ↓
-Standalone generation evaluation: AVAILABLE
-
-RAG1 + updated RAG3
-        ↓
-Complete CT-pipeline evaluation: PENDING
+FT ROUGE-L
+0.502342 → 0.512608
+Δ = +0.010266
 ```
 
-The root README should be updated with the new end-to-end numbers only after that rerun.
+```text
+FT BERTScore
+0.910006 → 0.911030
+Δ = +0.001024
+```
+
+The Base pipeline remained broadly stable across the two runs, while the Iteration-2 Fine-Tuned pipeline showed stronger end-to-end performance.
+
+### Interpretation
+
+The Iteration-2 RAG3 model produced a stronger end-to-end Fine-Tuned CT-RAG result, particularly in ROUGE-L. This provides complementary evidence that the improved RAG3 training/reference pipeline translated into better final CT-RAG answer quality.
+
+Because multiple changes were introduced in RAG3 Iteration 2, the end-to-end improvement should not be attributed solely to the additional training epoch or larger per-device batch size.
 
 ---
 
@@ -504,7 +505,7 @@ flowchart TD
     K --> L[Iteration 2]
 
     F --> M[CT RAG Pipeline]
-    L -. Pending integration .-> M
+    L --> M
 
     M --> N[Base vs FT End-to-End Evaluation]
 ```
@@ -557,9 +558,9 @@ This distinction is important because improvements in an individual component do
 | RAG1 fine-tuned retrieval      | **Finalized**                |
 | RAG2 query encoder research    | **Completed / not retained** |
 | RAG3 Iteration 1               | **Evaluated**                |
-| RAG3 Iteration 2               | **Evaluated standalone**     |
+| RAG3 Iteration 2               | **Evaluated standalone + end-to-end** |
 | Earlier Base vs FT CT pipeline | **Evaluated**                |
-| Updated RAG3 → CT pipeline     | **Pending rerun**            |
+| Updated RAG3 → CT pipeline     | **Evaluated**                |
 
 ---
 
@@ -588,6 +589,6 @@ The project treats RAG as multiple independently optimizable layers:
 
 RAG1 established the specialized retrieval layer, RAG2 tested and rejected a more complex asymmetric retrieval architecture, and RAG3 iteratively specialized generation with grounded pseudo-supervision and QLoRA.
 
-The **final end-to-end CT-pipeline result remains the earlier Base-vs-FT evaluation until the updated RAG3 Iteration-2 model is run through the complete pipeline**.
+The **updated end-to-end CT-pipeline evaluation now incorporates RAG3 Iteration 2**, while the earlier Iteration-1 result is retained for comparison.
 
 That separation keeps the component-level experiments and end-to-end claims technically consistent.
