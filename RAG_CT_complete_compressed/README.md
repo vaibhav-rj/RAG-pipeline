@@ -488,7 +488,17 @@ Because multiple changes were introduced in RAG3 Iteration 2, the end-to-end imp
 
 # 10. End-to-End LLM-Judge Evaluation
 
-The same 400-question end-to-end evaluation was additionally assessed with a fixed LLM judge (temperature = 0). The judge separately scored retrieval relevance, groundedness, response relevance and correctness.
+The same 400-question end-to-end evaluation was additionally assessed using Qwen 2.5 7B Instruct as a fixed LLM judge at temperature = 0.
+
+```text
+Qwen 2.5 7B Instruct was used offline in two distinct roles:
+
+1. Teacher/reference generation: temperature = 0.1
+2. End-to-end evaluation judge: temperature = 0
+
+The teacher generated context-grounded pseudo-reference answers for training;
+the judge independently scored Base vs FT retrieval and generated answers.
+```
 
 | Judge dimension | Base | Final FT (RAG1 + RAG3 Epoch-3) | Δ |
 |---|---:|---:|---:|

@@ -384,20 +384,14 @@ Therefore, the resulting improvement **cannot be attributed solely to increasing
 
 # 9. Iteration-2 Results
 
-## Overall
-
-| Metric | Base | LoRA | Absolute Δ |
-|---|---:|---:|---:|
-| ROUGE-L | 0.681817 | **0.683128** | +0.001311 |
-| BERTScore-F1 | 0.943086 | **0.943949** | +0.000863 |
-| Numeric Groundedness | **0.968105** | 0.965843 | -0.002261 |
-| Numeric Recall | 0.900501 | **0.903364** | +0.002864 |
-
-Overall generation remained **very close to the Base model**, with small improvements in ROUGE-L, BERTScore and numeric recall, while numeric groundedness decreased slightly.
+## Epoch 1
+- The results of iteration-2 epoch 1 have been neglected as it were quite inferior for most entities than base-model.
 
 ---
 
-## Question-Type Analysis
+## Epoch 2 — Final Iteration-2 Checkpoint
+
+### Epoch 2 Question-Type Analysis
 
 | Question type | n | Base ROUGE | LoRA ROUGE | Base BERT | LoRA BERT |
 |---|---:|---:|---:|---:|---:|
@@ -408,55 +402,55 @@ Overall generation remained **very close to the Base model**, with small improve
 | Temporal | 48 | **0.582274** | 0.569226 | **0.933253** | 0.930462 |
 | Numeric / Threshold | 37 | **0.682030** | 0.660298 | **0.942677** | 0.938950 |
 
-### Most important observation
+The strongest targeted improvement occurred in: **Eligibility / Qualification** followed by **Intervention**.
 
-The strongest targeted improvement occurred in:
+### Epoch 2 Paired Evaluation
 
-> **Eligibility / Qualification**
-
-For this slice:
+-  ROUGE-L
 
 ```text
-ROUGE-L:
-0.635210 → 0.655508
-
-BERTScore:
-0.927499 → 0.932038
-
-Numeric Recall:
-0.851973 → 0.871438
+Tie       = 365
+LoRA wins = 211
+Base wins = 208
 ```
 
-This is consistent with the intended intervention of improving eligibility supervision and prompt behavior.
-
-However, numeric groundedness for this slice moved slightly downward:
+-  BERTScore
 
 ```text
-0.919022 → 0.907919
+LoRA wins = 275
+Base wins = 268
+Tie       = 241
 ```
+The paired results again indicate **near-parity rather than a dramatic transformation**.
 
-Therefore the correct conclusion is **targeted improvement in eligibility answering, not universal generation improvement**.
+### Epoch 2 Grounding & Completeness
+
+| Metric | Base | LoRA |
+|---|---:|---:|
+| Mean context-support score | 0.442570 | 0.441146 |
+| Low-support sentence rate | 0.022534 | 0.022534 |
+| Numeric groundedness | 0.968105 | 0.965843 |
+| Numeric recall | 0.900501 | **0.903364** |
+
+### Epoch 2 OVERALL RESULTS
+
+| Metric | Base | LoRA | Absolute Δ |
+|---|---:|---:|---:|
+| ROUGE-L | 0.681817 | **0.683128** | +0.001311 |
+| BERTScore-F1 | 0.943086 | **0.943949** | +0.000863 |
+| Numeric Groundedness | **0.968105** | 0.965843 | -0.002261 |
+| Numeric Recall | 0.900501 | **0.903364** | +0.002864 |
+
+Overall generation remained **very close to the Base model**, with small improvements in ROUGE-L(*0.635210 → 0.655508*), BERTScore(*0.927499 → 0.932038*) 
+and numeric recall(0.851973 → 0.871438), while numeric groundedness decreased slightly(*0.919022 → 0.907919*). WHile context-support and low-support sentence rate were stagnant.
 
 ---
 
-## Iteration-2 Epoch-3
+## Epoch-3 — Final Iteration-2 Checkpoint
 
 A third epoch was run from the Iteration-2 configuration using the same seed/data split. Epoch 3 produced the strongest overall standalone Iteration-2 results and was retained as the generation checkpoint for the current final CT-RAG pipeline.
 
-| Metric | Base | LoRA — Epoch 3 | Absolute Δ |
-|---|---:|---:|---:|
-| ROUGE-L | 0.684971 | **0.690823** | +0.005852 |
-| BERTScore-F1 | 0.943861 | **0.945544** | +0.001683 |
-| Numeric Groundedness | 0.964547 | **0.967221** | +0.002674 |
-| Numeric Recall | 0.891752 | **0.894615** | +0.002863 |
-
-Compared with Epoch 2, Epoch 3 improved all four overall Base→LoRA deltas. The gains remain modest, so this should not be interpreted as a universal generation improvement. The retained Epoch-3 checkpoint therefore reflects a **directional improvement under the same seed/data split**, not proof that the third epoch alone caused the end-to-end gain because Iteration 2 also contained earlier data/reference/prompt changes.
-
-### Training-loss behaviour and late-tail divergence
-
-Across RAG3 Iterations 1–2, the training loss repeatedly showed a stable low-loss region followed by a late rise/divergence toward the end of the epoch. Epoch 3 followed the same broad pattern (approximately **0.10 through the early/middle region, rising to ~0.14 at the end**). This was treated as a training-dynamics limitation: later batches appeared less useful for further specialization than the earlier stable region. We attempted to flatten this behaviour through Iteration-2 training/schedule changes, but the tail divergence was not fully eliminated.
-
-Because the data were constructed as four context-conditioned anchors per trial/chunk across different question themes, the late rise was not interpreted simply as the dataset becoming uniformly harder toward the end. Seed 42 was retained for controlled epoch comparison; alternative seeds were not retained after substantially weaker runs.
+---
 
 ### Epoch-3 Question-Type Results
 
@@ -471,6 +465,25 @@ Because the data were constructed as four context-conditioned anchors per trial/
 
 Epoch 3 improved ROUGE/BERTScore across most slices, while **Temporal remained difficult** and did not improve on these text-similarity metrics.
 
+### Epoch 3 Paired Evaluation
+
+-  ROUGE-L
+
+```text
+Tie       = 375
+LoRA wins = 216
+Base wins = 193
+```
+
+-  BERTScore
+
+```text
+LoRA wins = 275
+Base wins = 268
+Tie       = 241
+```
+The paired results again indicate **far more contrast in favour of LoRA than Base**.
+
 ### Epoch-3 Grounding Diagnostics
 
 | Metric | Base | LoRA |
@@ -480,11 +493,45 @@ Epoch 3 improved ROUGE/BERTScore across most slices, while **Temporal remained d
 | Numeric groundedness | 0.964547 | **0.967221** |
 | Numeric recall | 0.891752 | **0.894615** |
 
-Context support was essentially unchanged and the low-support sentence rate was slightly higher. The strongest defensible conclusion is therefore **better overall generation and numeric behaviour**, rather than a broad independent grounding breakthrough.
+### Epoch-3 OVERALL RESULTS
 
-Epoch 4 was subsequently evaluated as a final optimization attempt, but its absolute LoRA ROUGE-L, BERTScore and context-support were below Epoch 3. It was therefore not retained.
+| Metric | Base | LoRA — Epoch 3 | Absolute Δ |
+|---|---:|---:|---:|
+| ROUGE-L | 0.684971 | **0.690823** | +0.005852 |
+| BERTScore-F1 | 0.943861 | **0.945544** | +0.001683 |
+| Numeric Groundedness | 0.964547 | **0.967221** | +0.002674 |
+| Numeric Recall | 0.891752 | **0.894615** | +0.002863 |
 
-### Retained checkpoint
+Both Rouge-L registered moderate gains while BERTScore-F1 had marginal gains. Context support was essentially unchanged, while numeric groundedness and numeric recall both showed small positive LoRA deltas. 
+Therefore Epoch 3 provides evidence of improved overall generation/numeric behaviour, but not a broad independent grounding breakthrough.
+
+## Epoch 2 → Epoch 3 Comparison
+
+Metric	Epoch 2 FT−Base	Epoch 3 FT−Base	Change in Δ
+ROUGE-L	+.001311	+.005852	+.004541
+BERTScore-F1	+.000863	+.001683	+.000820
+Numeric groundedness	−.002261	+.002674	+.004935
+Numeric recall	+.002864	+.002863	~0
+
+```text
+Epoch 3 improved the LoRA-vs-Base delta on all four overall metrics relative to Epoch 2. The most notable change was ROUGE-L, where the LoRA advantage increased from +0.00131 to +0.00585. Numeric groundedness also 
+changed from a small LoRA deficit (−0.00226) in Epoch 2 to a positive LoRA delta (+0.00267) in Epoch 3. Numeric recall, however, was effectively unchanged at +0.00286.
+
+**These results support retaining Epoch 3 as the stronger Iteration-2 checkpoint under the same seed/data split, but they do not isolate the causal effect of the third epoch. Iteration 2 already incorporated reference cleaning, prompt strengthening and training-configuration changes.**
+```
+
+### Training-Loss Behaviour
+
+```text
+Across Iteration-2 training, loss showed an early/mid low-loss region followed by a late rise. Epoch 3 followed the same broad pattern, reaching approximately 0.10 through the earlier/middle region before rising toward ~0.14 near the end. This recurring pattern was treated as a training-dynamics limitation rather than evidence that later batches were uniformly more difficult.
+```
+---
+
+## Epoch 4 — Not Retained
+
+Epoch 4 was evaluated as a final optimization attempt but was not retained because its absolute LoRA ROUGE-L, BERTScore and context-support were below Epoch 3. The final RAG3 checkpoint therefore remains Iteration 2 — Epoch 3, seed 42.
+
+##Retained checkpoint
 
 ```text
 Llama 3.1 8B Instruct + QLoRA
@@ -494,53 +541,7 @@ Seed = 42
 
 ---
 
-# 10. Grounding & Completeness
-
-| Metric | Base | LoRA |
-|---|---:|---:|
-| Mean context-support score | 0.442570 | 0.441146 |
-| Low-support sentence rate | 0.022534 | 0.022534 |
-| Numeric groundedness | 0.968105 | 0.965843 |
-| Numeric recall | 0.900501 | **0.903364** |
-
-The results do **not** support claiming a broad grounding improvement.
-
-Instead:
-
-```text
-Numeric recall       ↑ slightly
-Numeric groundedness ↓ slightly
-Context support      ≈ unchanged
-Low-support rate     = unchanged
-```
-
-This indicates a small trade-off between completeness and strict numeric grounding.
-
----
-
-# 11. Paired Evaluation — Iteration 2
-
-### ROUGE-L
-
-```text
-Tie       = 365
-LoRA wins = 211
-Base wins = 208
-```
-
-### BERTScore
-
-```text
-LoRA wins = 275
-Base wins = 268
-Tie       = 241
-```
-
-The paired results again indicate **near-parity rather than a dramatic transformation**.
-
----
-
-# 12. End-to-End RAG Role
+# 10. End-to-End RAG Role
 
 RAG3 sits after RAG1 retrieval:
 
@@ -574,7 +575,7 @@ Generate a concise, complete answer from retrieved evidence
 
 ---
 
-# 13. Final Experimental Story
+# 11. Final Experimental Story
 
 The RAG3 work evolved through a sequence of identifiable problems:
 
@@ -608,7 +609,7 @@ This is an important part of the project's engineering story: the model was not 
 
 ---
 
-# 14. Limitations
+# 12. Limitations
 
 - Teacher references are **pseudo-ground truth**, not expert annotations.
 - Some teacher generations initially failed/truncated.
@@ -620,7 +621,7 @@ This is an important part of the project's engineering story: the model was not 
 
 ---
 
-# 15. Final Design
+# 13. Final Design
 
 ```text
                  OFFLINE
