@@ -369,10 +369,10 @@ The second iteration therefore targeted:
 
 | Component | Iteration 1 | Iteration 2 |
 |---|---:|---:|
-| Epochs | 1 | **2** |
+| Epochs | 1 | **3** |
 | Per-device batch | 2 | **4** |
 | Gradient accumulation | 8 | 4 |
-| Effective batch | 16 | 16 |
+| Effective batch | 16 | **16** |
 | Reference cleaning | Initial | **Improved** |
 | Eligibility prompt | Initial | **Strengthened** |
 
@@ -436,6 +436,61 @@ However, numeric groundedness for this slice moved slightly downward:
 ```
 
 Therefore the correct conclusion is **targeted improvement in eligibility answering, not universal generation improvement**.
+
+---
+
+## Iteration-2 Epoch-3
+
+A third epoch was run from the Iteration-2 configuration using the same seed/data split. Epoch 3 produced the strongest overall standalone Iteration-2 results and was retained as the generation checkpoint for the current final CT-RAG pipeline.
+
+| Metric | Base | LoRA — Epoch 3 | Absolute Δ |
+|---|---:|---:|---:|
+| ROUGE-L | 0.684971 | **0.690823** | +0.005852 |
+| BERTScore-F1 | 0.943861 | **0.945544** | +0.001683 |
+| Numeric Groundedness | 0.964547 | **0.967221** | +0.002674 |
+| Numeric Recall | 0.891752 | **0.894615** | +0.002863 |
+
+Compared with Epoch 2, Epoch 3 improved all four overall Base→LoRA deltas. The gains remain modest, so this should not be interpreted as a universal generation improvement. The retained Epoch-3 checkpoint therefore reflects a **directional improvement under the same seed/data split**, not proof that the third epoch alone caused the end-to-end gain because Iteration 2 also contained earlier data/reference/prompt changes.
+
+### Training-loss behaviour and late-tail divergence
+
+Across RAG3 Iterations 1–2, the training loss repeatedly showed a stable low-loss region followed by a late rise/divergence toward the end of the epoch. Epoch 3 followed the same broad pattern (approximately **0.10 through the early/middle region, rising to ~0.14 at the end**). This was treated as a training-dynamics limitation: later batches appeared less useful for further specialization than the earlier stable region. We attempted to flatten this behaviour through Iteration-2 training/schedule changes, but the tail divergence was not fully eliminated.
+
+Because the data were constructed as four context-conditioned anchors per trial/chunk across different question themes, the late rise was not interpreted simply as the dataset becoming uniformly harder toward the end. Seed 42 was retained for controlled epoch comparison; alternative seeds were not retained after substantially weaker runs.
+
+### Epoch-3 Question-Type Results
+
+| Question type | n | Base ROUGE | LoRA ROUGE | Base BERT | LoRA BERT |
+|---|---:|---:|---:|---:|---:|
+| Eligibility / Qualification | 228 | 0.656928 | **0.657644** | 0.932666 | **0.933110** |
+| Intervention | 64 | 0.661598 | **0.667439** | 0.943098 | **0.945551** |
+| Numeric / Threshold | 37 | 0.663168 | **0.669361** | 0.939437 | **0.941543** |
+| Other | 180 | 0.594660 | **0.609685** | 0.934415 | **0.937659** |
+| Study Design | 227 | 0.809468 | **0.818702** | 0.965400 | **0.967680** |
+| Temporal | 48 | **0.616053** | 0.595652 | **0.935034** | 0.932568 |
+
+Epoch 3 improved ROUGE/BERTScore across most slices, while **Temporal remained difficult** and did not improve on these text-similarity metrics.
+
+### Epoch-3 Grounding Diagnostics
+
+| Metric | Base | LoRA |
+|---|---:|---:|
+| Mean context-support | 0.443536 | **0.443660** |
+| Low-support sentence rate | 0.018495 | 0.019770 |
+| Numeric groundedness | 0.964547 | **0.967221** |
+| Numeric recall | 0.891752 | **0.894615** |
+
+Context support was essentially unchanged and the low-support sentence rate was slightly higher. The strongest defensible conclusion is therefore **better overall generation and numeric behaviour**, rather than a broad independent grounding breakthrough.
+
+Epoch 4 was subsequently evaluated as a final optimization attempt, but its absolute LoRA ROUGE-L, BERTScore and context-support were below Epoch 3. It was therefore not retained.
+
+### Retained checkpoint
+
+```text
+Llama 3.1 8B Instruct + QLoRA
+RAG3 Iteration 2 — Epoch 3
+Seed = 42
+```
 
 ---
 
@@ -544,7 +599,9 @@ Stronger candidate instructions
     ↓
 Iteration-2 training
     ↓
-Targeted eligibility improvement + overall near-parity
+Epoch 3: strongest Iter-2 standalone checkpoint
+    ↓
+End-to-end CT-RAG evaluation
 ```
 
 This is an important part of the project's engineering story: the model was not simply trained once and evaluated. The data-generation and supervision pipeline itself was iteratively debugged.
@@ -559,7 +616,7 @@ This is an important part of the project's engineering story: the model was not 
 - Overall generation gains remain modest.
 - Numeric groundedness did not improve consistently.
 - Some question types remained stronger with the Base model.
-- Final end-to-end performance must be reassessed after running the updated RAG3 model through the complete CT pipeline.
+- The retained Epoch-3 generator has now been evaluated end-to-end; Epoch 4 was evaluated but not retained because it did not improve the overall checkpoint.
 
 ---
 
@@ -592,7 +649,7 @@ Question → RAG1 Retrieval → Top-4 Context
 ### Takeaway
 
 > RAG3 specialized the generation layer using context-grounded pseudo-references and QLoRA. Iteration 1 established near-parity with the pretrained generator, while Iteration 2 improved eligibility/qualification behavior after targeted reference cleaning, prompt 
-strengthening, and longer/larger-batch training. The updated model still requires a complete end-to-end CT-pipeline rerun before its effect can be reported in the root project results.
+strengthening, and longer/larger-batch training. The retained Epoch-3 model has now been evaluated in the complete CT-RAG pipeline.
 
 ### **Datasets**
 * [Iteration 1](https://huggingface.co/datasets/vab46/Clinical_trials_anchor-contextORpositive-ground-truth_LLM_LORA_ft)
@@ -601,4 +658,4 @@ strengthening, and longer/larger-batch training. The updated model still require
 ### **Models**
 
 * [Iteration 1](https://huggingface.co/vab46/llama-3.1-8b-instruct-lora-clinical_iter1)
-* [Iter2/Final model](https://huggingface.co/vab46/llama-3.1-8b-instruct-lora-clinical_iter2_epoch2)
+* [Iter2/Final model](https://huggingface.co/vab46/llama-3.1-8b-instruct-lora-clinical_iter2_epoch3)
