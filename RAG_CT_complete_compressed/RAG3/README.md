@@ -387,7 +387,6 @@ Therefore, the resulting improvement **cannot be attributed solely to increasing
 ## Epoch 1
 - The results of iteration-2 epoch 1 have been neglected as it were quite inferior for most entities than base-model.
 
----
 
 ## Epoch 2 — Final Iteration-2 Checkpoint
 
@@ -444,7 +443,6 @@ The paired results again indicate **near-parity rather than a dramatic transform
 Overall generation remained **very close to the Base model**, with small improvements in ROUGE-L(*0.635210 → 0.655508*), BERTScore(*0.927499 → 0.932038*) 
 and numeric recall(0.851973 → 0.871438), while numeric groundedness decreased slightly(*0.919022 → 0.907919*). WHile context-support and low-support sentence rate were stagnant.
 
----
 
 ## Epoch-3 — Final Iteration-2 Checkpoint
 
@@ -513,19 +511,17 @@ BERTScore-F1	+.000863	+.001683	+.000820
 Numeric groundedness	−.002261	+.002674	+.004935
 Numeric recall	+.002864	+.002863	~0
 
-```text
-Epoch 3 improved the LoRA-vs-Base delta on all four overall metrics relative to Epoch 2. The most notable change was ROUGE-L, where the LoRA advantage increased from +0.00131 to +0.00585. Numeric groundedness also 
+
+>Epoch 3 improved the LoRA-vs-Base delta on all four overall metrics relative to Epoch 2. The most notable change was ROUGE-L, where the LoRA advantage increased from +0.00131 to +0.00585. Numeric groundedness also 
 changed from a small LoRA deficit (−0.00226) in Epoch 2 to a positive LoRA delta (+0.00267) in Epoch 3. Numeric recall, however, was effectively unchanged at +0.00286.
 
-**These results support retaining Epoch 3 as the stronger Iteration-2 checkpoint under the same seed/data split, but they do not isolate the causal effect of the third epoch. Iteration 2 already incorporated reference cleaning, prompt strengthening and training-configuration changes.**
-```
+>**These results support retaining Epoch 3 as the stronger Iteration-2 checkpoint under the same seed/data split, but they do not isolate the causal effect of the third epoch. Iteration 2 already incorporated reference cleaning, prompt strengthening and training-configuration changes.**
+
 
 ### Training-Loss Behaviour
 
-```text
-Across Iteration-2 training, loss showed an early/mid low-loss region followed by a late rise. Epoch 3 followed the same broad pattern, reaching approximately 0.10 through the earlier/middle region before rising toward ~0.14 near the end. This recurring pattern was treated as a training-dynamics limitation rather than evidence that later batches were uniformly more difficult.
-```
----
+>Across Iteration-2 training, loss showed an early/mid low-loss region followed by a late rise. Epoch 3 followed the same broad pattern, reaching approximately 0.10 through the earlier/middle region before rising toward ~0.14 near the end. This recurring pattern was treated as a training-dynamics limitation rather than evidence that later batches were uniformly more difficult.
+
 
 ## Epoch 4 — Not Retained
 
