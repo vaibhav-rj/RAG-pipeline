@@ -500,12 +500,12 @@ The teacher generated context-grounded pseudo-reference answers for training;
 the judge independently scored Base vs FT retrieval and generated answers.
 ```
 
-| Judge dimension | Base | Final FT (RAG1 + RAG3 Epoch-3) | Δ |
+| Judge dimension | Base | Final FT (RAG1 + RAG3 Epoch-3) | Δ | %Δ |
 |---|---:|---:|---:|
-| Retrieval relevance | 55.610 | **66.178** | **+10.568** |
-| Groundedness | 57.515 | **68.210** | **+10.695** |
-| Response relevance | 63.190 | **73.525** | **+10.335** |
-| Correctness | 62.010 | **70.955** | **+8.945** |
+| Retrieval relevance | 55.610 | **66.178** | **+10.568** | **+19%** |
+| Groundedness | 57.515 | **68.210** | **+10.695** | **+18.6%** |
+| Response relevance | 63.190 | **73.525** | **+10.335** | **+16.36%** |
+| Correctness | 62.010 | **70.955** | **+8.945** | **+14.43%** |
 
 These results complement ROUGE-L/BERTScore: the specialized pipeline showed substantially better judged retrieval usefulness and answer quality, while the automatic text metrics showed smaller absolute changes.
 
