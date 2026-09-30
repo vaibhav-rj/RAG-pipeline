@@ -501,7 +501,7 @@ the judge independently scored Base vs FT retrieval and generated answers.
 ```
 
 | Judge dimension | Base | Final FT (RAG1 + RAG3 Epoch-3) | Δ | %Δ |
-|---|---:|---:|---:|
+|---|---:|---:|---:|---:|
 | Retrieval relevance | 55.610 | **66.178** | **+10.568** | **+19%** |
 | Groundedness | 57.515 | **68.210** | **+10.695** | **+18.6%** |
 | Response relevance | 63.190 | **73.525** | **+10.335** | **+16.36%** |
@@ -514,7 +514,7 @@ These results complement ROUGE-L/BERTScore: the specialized pipeline showed subs
 The same temperature-0 judge protocol was applied to both retained Iteration-2 epochs. Epoch 3 was directionally better on the Fine-Tuned system across all four judge dimensions:
 
 | Judge dimension | Epoch 2 FT | Epoch 3 FT | Δ |
-|---|---:|---:|---:|---:|
+|---|---:|---:|---:|
 | Retrieval relevance | 65.73 | **66.18** | **+0.45** |
 | Groundedness | 67.76 | **68.21** | **+0.45** |
 | Response relevance | 72.80 | **73.53** | **+0.72** |
