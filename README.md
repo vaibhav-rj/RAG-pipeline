@@ -16,4 +16,4 @@ Built and iteratively optimized a **domain-specific Clinical-Trials RAG pipeline
 - and adapted **Llama 3.1 8B Instruct with QLoRA** for context-grounded answer generation in RAG3, using Qwen 2.5 7B Instruct for offline reference-answer generation. 
 
 The final pipeline integrates **fine-tuned retrieval + LoRA-based generation**, with systematic evaluation of retrieval 
-and end-to-end answer quality against the corresponding base pipeline.
+and end-to-end answer quality against the corresponding base pipeline(using Judge LLM).
