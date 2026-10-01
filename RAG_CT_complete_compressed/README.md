@@ -438,6 +438,17 @@ Generation evaluation
 
 The controlled comparison isolates the effect of the specialized retrieval + generation stack as much as practical.
 
+## CT-Pipeline Generation / Evaluation Configuration
+
+```text
+Temperature = 0.3
+Top-p = 0.9
+Max tokens = 128
+Eval batch = 4
+Retrieved context = Top-4 chunks
+```
+>The CT pipeline uses Top-4 retrieved contexts rather than the single mother-trial context used in the standalone RAG3 evaluation. The lower token budget and batch size were used because four-context inference caused GPU OOM at the higher settings.
+
 ---
 
 # 9. End-to-End CT-Pipeline Results

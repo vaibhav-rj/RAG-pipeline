@@ -246,7 +246,7 @@ EOS was used as the padding token.
 
 ---
 
-# 6. Candidate Prompt
+# 6A. Candidate Prompt
 
 The candidate instruction was deliberately aligned with the teacher's grounding requirements:
 
@@ -267,6 +267,18 @@ Answer the user's QUESTION using the provided CONTEXT.
 ```
 
 The strengthened eligibility instruction was intended to address the earlier Rule-15-style weakness.
+
+---
+
+# 6B. Inference / Evaluation Configuration
+
+```text
+Temperature = 0.3
+Top-p = 0.9
+Max tokens = 256
+Eval batch = 8
+
+>Base and LoRA generation were evaluated under the same decoding configuration throughout RAG3 Iterations 1–2 to avoid a decoding-related comparison confound.
 
 ---
 
@@ -375,6 +387,14 @@ The second iteration therefore targeted:
 | Effective batch | 16 | **16** |
 | Reference cleaning | Initial | **Improved** |
 | Eligibility prompt | Initial | **Strengthened** |
+
+>Strengthened eligiblity instructions(additions to existing candidate prompt at last):-
+```text
+- Don't limit answers to single word(1.eligiblity/qualification questions with a 'True/False'; 2. age/temporal questions with just a 'number') or blank(in case no answer avalilable in a given context).Rather 
+  briefly explain the answer in with supported criteria/reasons(from context).
+- For eligiblity/qualification questions, preserve ALL relevant eligibility/inclusion criteria supported by the CONTEXT. If distinct criteria/reasons (generally >3-4) are relevant and long string based continous 
+  sentence affects context, distinguish between criteria and additional criteria if supported by context .State the additional criteria explicitly(json). Else stay with string based continous format in other cases.
+```
 
 The improvements were intentionally combined because the goal was to improve the overall supervision/training pipeline rather than perform a single-variable ablation.
 
