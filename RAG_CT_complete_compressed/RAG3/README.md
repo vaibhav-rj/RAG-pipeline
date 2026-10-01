@@ -277,6 +277,7 @@ Temperature = 0.3
 Top-p = 0.9
 Max tokens = 256
 Eval batch = 8
+```
 
 >Base and LoRA generation were evaluated under the same decoding configuration throughout RAG3 Iterations 1–2 to avoid a decoding-related comparison confound.
 
