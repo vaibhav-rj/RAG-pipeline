@@ -497,9 +497,9 @@ Base wins = 193
 -  BERTScore
 
 ```text
-LoRA wins = 275
-Base wins = 268
-Tie       = 241
+LoRA wins = 291
+Tie = 262
+Base wins = 231
 ```
 The paired results again indicate **far more contrast in favour of LoRA than Base**.
 
@@ -526,11 +526,12 @@ Therefore Epoch 3 provides evidence of improved overall generation/numeric behav
 
 ## Epoch 2 → Epoch 3 Comparison
 
-Metric	Epoch 2 FT−Base	Epoch 3 FT−Base	Change in Δ
-ROUGE-L	+.001311	+.005852	+.004541
-BERTScore-F1	+.000863	+.001683	+.000820
-Numeric groundedness	−.002261	+.002674	+.004935
-Numeric recall	+.002864	+.002863	~0
+Metric | Epoch 2 FT−Base Δ  | Epoch 3 FT−Base Δ  | Relative Δ |
+|---|---:|---:|---:|
+ROUGE-L | +.001311 | +.005852 | +.004541 |
+BERTScore-F1 | +.000863 | +.001683 | +.000820 | 
+Numeric groundedness | −.002261 | +.002674 | +.004935 | 
+Numeric recall | +.002864 | +.002863 | ~0 |
 
 
 >Epoch 3 improved the LoRA-vs-Base delta on all four overall metrics relative to Epoch 2. The most notable change was ROUGE-L, where the LoRA advantage increased from +0.00131 to +0.00585. Numeric groundedness also 
