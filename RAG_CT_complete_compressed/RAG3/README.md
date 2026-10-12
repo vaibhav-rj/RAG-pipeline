@@ -413,16 +413,16 @@ Therefore, the resulting improvement **cannot be attributed solely to increasing
 
 ### Epoch 2 Question-Type Analysis
 
-| Question type | n | Base ROUGE | LoRA ROUGE | Base BERT | LoRA BERT |
-|---|---:|---:|---:|---:|---:|
-| Eligibility / Qualification | 228 | 0.635210 | **0.655508** | 0.927499 | **0.932038** |
-| Study Design | 227 | **0.823676** | 0.808107 | **0.967911** | 0.967096 |
-| Other | 180 | 0.595429 | **0.598936** | **0.934205** | 0.934145 |
-| Intervention | 64 | 0.662192 | **0.673651** | 0.943153 | **0.944862** |
-| Temporal | 48 | **0.582274** | 0.569226 | **0.933253** | 0.930462 |
-| Numeric / Threshold | 37 | **0.682030** | 0.660298 | **0.942677** | 0.938950 |
+| Question type | n | Base ROUGE-L | LoRA ROUGE-L | Base BERT-F1 | LoRA BERT-F1 | Base numeric groundedness | LoRA numeric groundedness | Base numeric recall | LoRA numeric recall |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| Eligibility / Qualification | 228 | 0.635210 | **0.655508** | 0.927499 | **0.932038** | **0.919022** | 0.907919 | 0.851973 | **0.871438** |
+| Study Design | 227 | **0.823676** | 0.808107 | **0.967911** | 0.967096 | **0.987518** | **0.987518** | **0.965859** | **0.965859** |
+| Other | 180 | 0.595429 | **0.598936** | **0.934205** | 0.934145 | 0.990370 | **0.991528** | **0.882738** | 0.881085 |
+| Intervention | 64 | 0.662192 | **0.673651** | 0.943153 | **0.944862** | 0.996094 | **0.996875** | 0.889397 | **0.903348** |
+| Temporal | 48 | **0.582274** | 0.569226 | **0.933253** | 0.930462 | **1.000000** | **1.000000** | **0.905556** | 0.859375 |
+| Numeric / Threshold | 37 | **0.682030** | 0.660298 | **0.942677** | 0.938950 | 0.953346 | **0.966860** | **0.897614** | 0.882170 |
 
-The strongest targeted improvement occurred in: **Eligibility / Qualification** followed by **Intervention**.
+Bold indicates the higher value (ties bold both); for numeric groundedness and numeric recall, higher is not automatically synonymous with better overall clinical correctness, so interpret these alongside the other metrics. The strongest text-similarity gains were in **Eligibility / Qualification** and **Intervention**, while numeric groundedness improved for **Numeric / Threshold** but numeric recall declined in that category.
 
 ### Epoch 2 Paired Evaluation
 
@@ -454,15 +454,15 @@ The paired results again indicate **near-parity rather than a dramatic transform
 
 ### Epoch 2 OVERALL RESULTS
 
-| Metric | Base | LoRA | Absolute Δ |
+| Metric | Base | LoRA | Relative Δ (LoRA vs Base) |
 |---|---:|---:|---:|
-| ROUGE-L | 0.681817 | **0.683128** | +0.001311 |
-| BERTScore-F1 | 0.943086 | **0.943949** | +0.000863 |
-| Numeric Groundedness | **0.968105** | 0.965843 | -0.002261 |
-| Numeric Recall | 0.900501 | **0.903364** | +0.002864 |
+| ROUGE-L | 0.681817 | **0.683128** | **+0.19%** |
+| BERTScore-F1 | 0.943086 | **0.943949** | **+0.09%** |
+| Numeric Groundedness | **0.968105** | 0.965843 | -0.23% |
+| Numeric Recall | 0.900501 | **0.903364** | **+0.32%** |
 
-Overall generation remained **very close to the Base model**, with small improvements in ROUGE-L(*0.635210 → 0.655508*), BERTScore(*0.927499 → 0.932038*) 
-and numeric recall(0.851973 → 0.871438), while numeric groundedness decreased slightly(*0.919022 → 0.907919*). WHile context-support and low-support sentence rate were stagnant.
+Overall generation remained **very close to the Base model**, with small improvements in ROUGE-L(**+0.19%**), BERTScore(**+0.09%**) 
+and numeric recall(**+0.32%**), while numeric groundedness decreased slightly( -0.23%). WHile context-support and low-support sentence rate were stagnant.
 
 
 ## Epoch-3 — Final Iteration-2 Checkpoint
@@ -473,14 +473,14 @@ A third epoch was run from the Iteration-2 configuration using the same seed/dat
 
 ### Epoch-3 Question-Type Results
 
-| Question type | n | Base ROUGE | LoRA ROUGE | Base BERT | LoRA BERT |
-|---|---:|---:|---:|---:|---:|
-| Eligibility / Qualification | 228 | 0.656928 | **0.657644** | 0.932666 | **0.933110** |
-| Intervention | 64 | 0.661598 | **0.667439** | 0.943098 | **0.945551** |
-| Numeric / Threshold | 37 | 0.663168 | **0.669361** | 0.939437 | **0.941543** |
-| Other | 180 | 0.594660 | **0.609685** | 0.934415 | **0.937659** |
-| Study Design | 227 | 0.809468 | **0.818702** | 0.965400 | **0.967680** |
-| Temporal | 48 | **0.616053** | 0.595652 | **0.935034** | 0.932568 |
+| Question type | n | Base ROUGE-L | LoRA ROUGE-L | Base BERT-F1 | LoRA BERT-F1 | Base numeric groundedness | LoRA numeric groundedness | Base numeric recall | LoRA numeric recall |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| Eligibility / Qualification | 228 | 0.656928 | **0.657644** | 0.932666 | **0.933110** | 0.910152 | **0.913755** | **0.847881** | 0.836647 |
+| Intervention | 64 | 0.661598 | **0.667439** | 0.943098 | **0.945551** | 0.984375 | **0.996875** | 0.867188 | **0.911551** |
+| Numeric / Threshold | 37 | 0.663168 | **0.669361** | 0.939437 | **0.941543** | **0.966860** | **0.966860** | **0.855143** | **0.855143** |
+| Other | 180 | 0.594660 | **0.609685** | 0.934415 | **0.937659** | 0.987037 | **0.990139** | 0.868108 | **0.884127** |
+| Study Design | 227 | 0.809468 | **0.818702** | 0.965400 | **0.967680** | **0.987885** | 0.987518 | 0.964391 | **0.966960** |
+| Temporal | 48 | **0.616053** | 0.595652 | **0.935034** | 0.932568 | **1.000000** | **1.000000** | **0.906250** | 0.875000 |
 
 Epoch 3 improved ROUGE/BERTScore across most slices, while **Temporal remained difficult** and did not improve on these text-similarity metrics.
 
@@ -514,28 +514,27 @@ The paired results again indicate **far more contrast in favour of LoRA than Bas
 
 ### Epoch-3 OVERALL RESULTS
 
-| Metric | Base | LoRA — Epoch 3 | Absolute Δ |
+| Metric | Base | LoRA — Epoch 3 | Relative Δ (LoRA vs Base) |
 |---|---:|---:|---:|
-| ROUGE-L | 0.684971 | **0.690823** | +0.005852 |
-| BERTScore-F1 | 0.943861 | **0.945544** | +0.001683 |
-| Numeric Groundedness | 0.964547 | **0.967221** | +0.002674 |
-| Numeric Recall | 0.891752 | **0.894615** | +0.002863 |
+| ROUGE-L | 0.684971 | **0.690823** | **+0.85%** |
+| BERTScore-F1 | 0.943861 | **0.945544** | **+0.18%** |
+| Numeric Groundedness | 0.964547 | **0.967221** | **+0.28%** |
+| Numeric Recall | 0.891752 | **0.894615** | **+0.32%** |
 
 Both Rouge-L registered moderate gains while BERTScore-F1 had marginal gains. Context support was essentially unchanged, while numeric groundedness and numeric recall both showed small positive LoRA deltas. 
 Therefore Epoch 3 provides evidence of improved overall generation/numeric behaviour, but not a broad independent grounding breakthrough.
 
 ## Epoch 2 → Epoch 3 Comparison
 
-Metric | Epoch 2 FT−Base Δ  | Epoch 3 FT−Base Δ  | Relative Δ |
+| Metric | Epoch 2 LoRA vs Base | Epoch 3 LoRA vs Base | Change in relative Δ |
 |---|---:|---:|---:|
-ROUGE-L | +.001311 | +.005852 | +.004541 |
-BERTScore-F1 | +.000863 | +.001683 | +.000820 | 
-Numeric groundedness | −.002261 | +.002674 | +.004935 | 
-Numeric recall | +.002864 | +.002863 | ~0 |
+| ROUGE-L | +0.19% | +0.85% | **+0.66 percentage points** |
+| BERTScore-F1 | +0.09% | +0.18% | **+0.09 percentage points** |
+| Numeric groundedness | -0.23% | +0.28% | **+0.51 percentage points** |
+| Numeric recall | +0.32% | +0.32% | ~0.00 percentage points |
 
-
->Epoch 3 improved the LoRA-vs-Base delta on all four overall metrics relative to Epoch 2. The most notable change was ROUGE-L, where the LoRA advantage increased from +0.00131 to +0.00585. Numeric groundedness also 
-changed from a small LoRA deficit (−0.00226) in Epoch 2 to a positive LoRA delta (+0.00267) in Epoch 3. Numeric recall, however, was effectively unchanged at +0.00286.
+> Epoch 3 improved the relative LoRA-vs-Base delta on all 4 metrics:- ROUGE-L, BERTScore-F1, and numeric groundedness. These are relative percentage changes in each epoch's overall LoRA-versus-Base comparison; the final column is the difference between those percentages.
+**Rouge-L(+0.19% --> +0.85%)** and **Numeric groundedness(-0.23%--> +0.28%)** had most substantial increments when gain % of epoch2 and epoch3 compared. Numeric recall was effectively unchanged. 
 
 >**These results support retaining Epoch 3 as the stronger Iteration-2 checkpoint under the same seed/data split, but they do not isolate the causal effect of the third epoch. Iteration 2 already incorporated reference cleaning, prompt strengthening and training-configuration changes.**
 
