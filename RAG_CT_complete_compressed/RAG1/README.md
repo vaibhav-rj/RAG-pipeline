@@ -60,6 +60,8 @@ Eligibility information
 
 ### Iteration 1
 
+>Across all 3 iterations synthetic anchors were generated using **llama-3.1-8b instruct** model ran on derive chunks.
+
 Four question types were generated from a trial/chunk:
 
 1. Macro question
