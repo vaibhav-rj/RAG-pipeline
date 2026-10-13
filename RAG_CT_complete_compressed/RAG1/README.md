@@ -202,7 +202,7 @@ MAP@100       = 0.6162
 
 - **Average gain % across metrics**---->**27.30714627**
 - **Variance of % gain across metrics**-----> **60.6223122**
-- **Standard deviation **-----> **7.786033149**
+- **Standard deviation**-----> **7.786033149**
 
 ---
 
@@ -240,10 +240,10 @@ excl_query_list=['''Does the participant have any history of neurological, neuro
 intracranial, pituitary, or other systemic/ocular disease that could affect study eligibility or the planned eye examination?''',]
 ```
 
-### Nomic ai fine tune(iteartion 3)  vs base e5 performance:
+### Nomic ai fine tune(iteartion 3)  vs base e5 performance cum observation:
 
 | Query → Chunk type | Similarity(Nomic ft) | Similarity(base e5) |
-|---|---:|---:|---:|
+|---|---:|---:|
 | Inclusion query→ Inclusion chunk | 0.6381 | 0.8611 |
 | Exclusion query→ Exclusion chunk | 0.4965 | 0.8957 |
 | Inclusion query→ Exclusion chunk | 0.2535 | 0.8200 |
