@@ -192,31 +192,67 @@ MAP@100       = 0.6162
 
 ### Base → FT NDCG comparison used in the end-to-end pipeline
 
-| Dimension | Base | FT |
-|---:|---:|---:|
-| 768 | 0.523048 | **0.641648** |
-| 512 | 0.516347 | **0.632601** |
-| 256 | 0.498844 | **0.621455** |
-| 128 | 0.468557 | **0.599204** |
-| 64 | 0.405503 | **0.559806** |
+| Dimension | Base | FT | %change |
+|---:|---:|---:|---:|
+| 768 | 0.523048 | **0.641648** | 22.67486292 |
+| 512 | 0.516347 | **0.632601** | 22.51459668 |
+| 256 | 0.498844 | **0.621455** | 24.57903284 |
+| 128 | 0.468557 | **0.599204** | 27.88272958 |
+| 64 | 0.405503 | **0.559806** | 38.05216984 |
+
+- **Average gain % across metrics**---->**27.30714627**
+- **Variance of % gain across metrics**-----> **60.6223122**
+- **Standard deviation **-----> **7.786033149**
 
 ---
 
 ## Qualitative Retrieval Sanity Check
 
-Example similarity pattern:
+### Example for similarity check :-
 
-| Query → Chunk type | Similarity |
-|---|---:|
-| Inclusion → Inclusion | 0.6381 |
-| Exclusion → Exclusion | 0.4965 |
-| Inclusion → Exclusion | 0.2535 |
-| Exclusion → Inclusion | 0.2150 |
+- Inclusion and exclsuion chunk(1-1 each):-
 
-The relevant query/chunk pairs showed stronger similarity than cross-type irrelevant pairs.
+```text
+incl_chunk=''' Absence of suspicion of dementia, based on normal performance according to age and educational level at neuropsychological testing defined as:
+Free recall ≥17 and total recall ≥40 for the Free and Cued Selective Reminding Test (Grober and Buschke test 52) MMSE ≥ norm for age and educational level (defined by mean - 1 SD)
+Isaac's set test ≥ norm for age and educational level (defined by mean - 1 SD)
+Matched to age and gender of the cases
+Patient benefiting from social insurance'''
 
-These raw similarities are used only as a qualitative sanity check; retrieval metrics remain the primary evaluation.
+excl_chunk='''History of Parkinson's disease or other neurodegenerative disorder
+History of Horton's disease
+History of inflammatory neuropathies (in particular Devic's disease, multiple sclerosis)
+History of vascular ischemic neuropathies and chronic intracranial hypertension
+History of pituitary tumors
+Presence of diseases (systemic and/or ocular diseases) or behavioural or cognitive symptoms incompatible with eye examination
+Known diabetes
+Person under tutorship or curatorship, person unable to express consent'''
+```
 
+
+- Inclusion and exclusion query list(1 each) generated from corresponding inclusion and exclusion sungle chunks :-
+
+``` text
+incl_query_list =['''Does the participant demonstrate cognitive performance within the age- and
+education-adjusted normal range on the required neuropsychological assessments, with no clinical suspicion of dementia?''',]
+
+excl_query_list=['''Does the participant have any history of neurological, neurodegenerative, vascular, inflammatory,
+intracranial, pituitary, or other systemic/ocular disease that could affect study eligibility or the planned eye examination?''',]
+```
+
+### Nomic ai fine tune(iteartion 3)  vs base e5 performance:
+
+| Query → Chunk type | Similarity(Nomic ft) | Similarity(base e5) |
+|---|---:|---:|---:|
+| Inclusion query→ Inclusion chunk | 0.6381 | 0.8611 |
+| Exclusion query→ Exclusion chunk | 0.4965 | 0.8957 |
+| Inclusion query→ Exclusion chunk | 0.2535 | 0.8200 |
+| Exclusion query→ Inclusion chunk | 0.2150 | 0.8034 |
+
+- The relevant query/chunk pairs shows stronger similarity than cross-type irrelevant pairs in case of nomic fine tuned model than **base e5** model(as evident from high similarity scores for dis-similar query-chunk-->row 4th, 5th).
+- These raw similarities are used only as a qualitative sanity check. They don't depict real similarity, reason being that the the geometric norms of vector embeddings get scaled up/down while training.
+>Infact Retrieval metrics remain the primary evaluation. The same happened with nomic ai while fine tuning(during RAG clinical trial runs for example:- the base had magnified scores due to greter norms, but poor discriminative power as de[picted by metrics).==>
+just refer block-9 o/p for **RAG_CT_complete_compressed/ct-rag-pipeline.ipynb**--->even though top retrieved chunk for input question is excatly same, there is divergence of similarity score(ft<base) due to norm vectors/scale decresing during ft. 
 ---
 
 ## Production Retrieval
